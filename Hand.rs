@@ -419,6 +419,98 @@ fn get_ranks(hand: &mut[i32;5]) -> i32
   var
 }
 
+fn tie_flush(hand1: &mut[i32;5],hand2: &mut[i32;5]) -> i32 {
+  let mut ret = 0;
+  for i in 0..4{
+    if hand1[4-i] > hand2[4-i]{
+      ret = 1
+    }
+    else if hand2[4-i] > hand1[4-i]{
+      ret = 2
+    }
+  }
+  ret
+}
+
+fn tie_straight(hand1: &mut[i32;5],hand2: &mut[i32;5]) -> i32 {
+  let mut ret = 0;
+  for i in 0..4{
+    if hand1[4-i] > hand2[4-i]{
+      ret = 1
+    }
+    else if hand2[4-i] > hand1[4-i]{
+      ret = 2
+    }
+  }
+  ret
+}
+
+fn tie_fr_of_kind(hand1: &mut[i32;5],hand2: &mut[i32;5]) -> i32 {
+  let mut ret = 0;  
+  if hand1[2] > hand2[2]{
+      ret = 1
+    }
+    else if hand2[2] > hand1[2]{
+      ret = 2
+    }
+    ret
+}
+
+fn tie_thr_of_kind(hand1: &mut[i32;5],hand2: &mut[i32;5]) -> i32 {
+  let mut ret = 0;
+  if hand1[2] > hand2[2]{
+    ret = 1
+  }
+  else if hand2[2] > hand1[2]{
+    ret = 2
+  }
+ret
+}
+
+fn tie_pair(hand1: &mut[i32;5],hand2: &mut[i32;5]) -> i32{
+  let mut hand1twos = hand1[2]; 
+  let mut hand2twos = hand2[2];
+  let mut ret = 0;
+  
+  if hand1 [0] == hand1 [1]{
+    hand1twos = hand1[0]; 
+    //println!("hand 1 twos are ,{}",hand1twos );
+  }
+  else if hand1 [3] == hand1 [4]{
+    hand1twos = hand1[3];
+    //println!("hand 1 twos are ,{}",hand1twos );
+  }
+  if hand2 [0] == hand2 [1]{
+    hand2twos = hand2[0];
+   // println!("hand 2 twos are ,{}",hand2twos );
+  }
+  else if hand2 [3] == hand2 [4]{
+    hand2twos = hand2[3];
+   // println!("hand 2 twos are ,{}",hand2twos );
+  }
+  if hand1twos > hand2twos{
+    ret = 1
+  }
+  else if hand1twos < hand2twos{
+    ret = 2
+  }
+  ret
+}
+fn tie_full_house(hand1: &mut[i32;5],hand2: &mut[i32;5]) -> i32 {
+  let mut ret = 0;
+  let mut threes = tie_thr_of_kind(hand1,hand2);
+
+  if threes == 0{
+    println!("threes are ,{}",threes );
+    if tie_pair(hand1,hand2) == 1{
+      threes = 1;
+    }
+    else if tie_pair(hand1,hand2) == 2{
+      threes = 2;
+    }
+  }
+  threes
+}
 
 
 
@@ -467,4 +559,9 @@ println!("flush,{}",has_flush(&mut(r)));
   println!("{:?}", r2);
   println!("{:?}", get_ranks(&mut(r2)));
  */
+
+  let mut h1: [i32;5] = [1,1,1,5,5];
+  let mut h2: [i32;5] = [1,1,1,6,6];
+  println!("pair test,{}", tie_pair(&mut(h1),&mut(h2)));
+  println!("full test,{}", tie_full_house(&mut(h1),&mut(h2)));
 }
